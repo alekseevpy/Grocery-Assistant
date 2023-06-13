@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8">
+    <style>
+      @page {
+        size: A4;
+        @frame header_frame {
+          -pdf-frame-content: headerContent;
+          left: 50pt; width: 512pt; top: 50pt; height: 40pt;
+        }
+        @frame content_frame {
+          left: 50pt; width: 512pt; top: 90pt; height: 632pt;
+        }
+        @frame footer_frame {
+          -pdf-frame-content: footerContent;
+          left: 50pt; width: 512pt; top: 725pt; height: 80pt;
+        }
+      }
+      @font-face { 
+        font-family: OpenSans-Medium;
+        src: url("/static/fonts/OpenSans-Medium.ttf")
+      }
+      body { 
+        font-family: OpenSans-Medium;
+      }
+      p { 
+        font-family: OpenSans-Medium;
+      }
+      hr {
+        border: none;
+        background-color: black;
+        color: black;
+        height: 3px;
+      }
+      table {
+        width: 50%;
+        text-align: center;
+        border: 1px solid black;
+      }
+      td {
+        padding: 5px;
+      }
+      th {
+        padding: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="headerContent">
+      <p align="center">
+        <font size="6" color="red">
+          <b>Список покупок</b>
+        </font>
+      </p>
+    </div>
+    <main>
+      <font size="5">
+        <hr>
+          <p align="center">
+            <table align="center">
+              <tr>
+                <th>Название</th>
+                <th>Ед. изм.</th>
+                <th>Количество</th>
+              </tr>
+              {% for obj in context %}
+                <tr>
+                  <td>{{ obj.recipe__ingredients__name }}</td>
+                  <td>{{ obj.recipe__ingredients__measurement_unit }}</td>
+                  <td>{{ obj.total|floatformat:"0" }}</td>
+                </tr>
+              {% endfor %}
+            </table>
+          </p>
+        <hr>
+      </font>
+    </main>
+    <div id="footerContent">
+      <p align="center">
+        <font size="4">
+          Сервис
+          <font color="#fa8e47">
+            "Foodgram"
+          </font><br>
+          Ваш "Продуктовый помощник" <br>
+          © {% now "Y" %} Copyright
+        </font>
+      </p>
+      <p align="center">
+        Страница - <pdf:pagenumber>
+      </p>
+    </div>
+  </body>
