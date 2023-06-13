@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import Tag, Ingredient, Recipe, IngredientRecipe, TagRecipe
+
+from .models import Ingredient, IngredientRecipe, Recipe, Tag
 
 
 @admin.register(Tag)
@@ -26,16 +27,14 @@ class IngredientRecipeInline(admin.TabularInline):
     measurement_unit.short_description = "Единица измерения"
 
 
-class TagRecipeInline(admin.TabularInline):
-    model = TagRecipe
-
-
 @admin.register(Recipe)
 class RecipeAdmin(admin.ModelAdmin):
     list_display = ("name", "author")
     list_filter = ("author", "name", "tags")
     readonly_fields = ("favorite_count",)
-    inlines = (IngredientRecipeInline, TagRecipeInline)
+    inlines = [
+        IngredientRecipeInline,
+    ]
 
     def favorite_count(self, instance):
         return instance.favorite.count()

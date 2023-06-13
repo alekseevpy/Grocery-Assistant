@@ -37,7 +37,7 @@ class Recipe(models.Model):
     author = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        related_name="recipes",
+        related_name="recipe",
         verbose_name="Автор",
     )
     ingredients = models.ManyToManyField(
@@ -46,7 +46,9 @@ class Recipe(models.Model):
         verbose_name="Ингредиенты",
     )
     tags = models.ManyToManyField(
-        Tag, through="TagRecipe", verbose_name="Теги"
+        Tag,
+        through="TagRecipe",
+        verbose_name="Теги рецепта",
     )
     image = models.ImageField("Картинка", upload_to="recipes/images/")
     name = models.CharField("Название", max_length=200, db_index=True)
@@ -68,12 +70,18 @@ class IngredientRecipe(models.Model):
     """Промежуточная модель связи ингредиента в рецепте."""
 
     ingredient = models.ForeignKey(
-        Ingredient, on_delete=models.CASCADE, verbose_name="Ингредиент"
+        Ingredient,
+        on_delete=models.CASCADE,
+        related_name="ingredient",
+        verbose_name="Ингредиент",
     )
     recipe = models.ForeignKey(
-        Recipe, on_delete=models.CASCADE, verbose_name="Рецепт"
+        Recipe,
+        on_delete=models.CASCADE,
+        related_name="recipe",
+        verbose_name="Рецепт",
     )
-    number = models.PositiveSmallIntegerField("Количество")
+    amount = models.PositiveSmallIntegerField("Количество")
 
     class Meta:
         verbose_name = "Ингредиент в рецепте"
@@ -84,7 +92,7 @@ class IngredientRecipe(models.Model):
 
 
 class TagRecipe(models.Model):
-    """Промежуточная модель связи тега в рецепта."""
+    """Промежуточная модель связи тега и рецепта."""
 
     tag = models.ForeignKey(Tag, on_delete=models.CASCADE, verbose_name="Тег")
     recipe = models.ForeignKey(
@@ -92,8 +100,8 @@ class TagRecipe(models.Model):
     )
 
     class Meta:
-        verbose_name = "Тег в рецепте"
-        verbose_name_plural = "Теги в рецептах"
+        verbose_name = "Тег и рецепт"
+        verbose_name_plural = "Теги и рецепты"
 
     def __str__(self):
-        return f"{self.tag.name} присвоен рецепту {self.recipe.name}"
+        return f"{self.tag.name} добавлен к рецепту: {self.recipe.name}"

@@ -1,40 +1,6 @@
 from django.db import models
-from users.models import User
 from recipes.models import Recipe
-
-
-class Subscription(models.Model):
-    """Модель подписки пользователя на автора."""
-
-    user = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE,
-        related_name="follower",
-        verbose_name="Подписчик",
-    )
-    author = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE,
-        related_name="celebrity",
-        verbose_name="Автор",
-    )
-
-    class Meta:
-        verbose_name = "Подписка"
-        verbose_name_plural = "Подписки"
-
-        constraints = [
-            models.UniqueConstraint(
-                fields=["user", "author"], name="unique_couple"
-            ),
-            models.CheckConstraint(
-                check=~models.Q(user=models.F("author")),
-                name="self-subscription_avoidance",
-            ),
-        ]
-
-    def __str__(self):
-        return f"{self.user.username} подписан на {self.author.username}"
+from users.models import User
 
 
 class Favorite(models.Model):
@@ -43,14 +9,14 @@ class Favorite(models.Model):
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        related_name="chooser",
+        related_name="favorite",
         verbose_name="Пользователь",
     )
     recipe = models.ForeignKey(
         Recipe,
         on_delete=models.CASCADE,
         related_name="favorite",
-        verbose_name="Рецепт",
+        verbose_name="Избранный рецепт",
     )
 
     class Meta:
@@ -76,14 +42,14 @@ class ShoppingList(models.Model):
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        related_name="buyer",
+        related_name="shopping_list",
         verbose_name="Пользователь",
     )
     recipe = models.ForeignKey(
         Recipe,
         on_delete=models.CASCADE,
-        related_name="stuff",
-        verbose_name="Рецепт",
+        related_name="shopping_list",
+        verbose_name="Список покупок",
     )
 
     class Meta:
@@ -92,7 +58,7 @@ class ShoppingList(models.Model):
 
         constraints = [
             models.UniqueConstraint(
-                fields=["user", "recipe"], name="unique_shopping_cart"
+                fields=["user", "recipe"], name="unique_shoppinglist"
             )
         ]
 
