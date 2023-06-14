@@ -19,4 +19,4 @@ class Command(BaseCommand):
                 Ingredient.objects.create(
                     name=name, measurement_unit=measurement_unit
                 )
-        self.stdout.write(self.style.SUCCESS("Все ингридиенты загружены!"))
+        self.stdout.write(self.style.SUCCESS("Все ингредиенты  загружены!"))

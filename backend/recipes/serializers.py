@@ -30,7 +30,7 @@ class IngredientRecipeSerializer(serializers.ModelSerializer):
         fields = ("id", "name", "measurement_unit", "number")
 
 
-class IngredientRecipeSaveSerializer(serializers.Serializer):
+class IngredientRecipeSaveSerializer(serializers.ModelSerializer):
     """Сериализатор для сохранения ингредиентов в рецепте."""
 
     id = serializers.IntegerField()
@@ -46,7 +46,12 @@ class TagSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Tag
-        fields = "__all__"
+        fields = (
+            "id",
+            "name",
+            "color",
+            "slug",
+        )
 
 
 class Base64ImageField(serializers.ImageField):
@@ -115,7 +120,20 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Recipe
-        fields = "__all__"
+        fields = (
+            "id",
+            "author",
+            "ingredients",
+            "tags",
+            "image",
+            "name",
+            "text",
+            "cooking_time",
+        )
+        read_only_fields = (
+            "author",
+            "ingredients",
+        )
         read_only_fields = (
             "author",
             "ingredients",

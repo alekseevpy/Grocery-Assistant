@@ -10,7 +10,11 @@ class FavoriteCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Favorite
-        fields = "__all__"
+        fields = (
+            "id",
+            "user",
+            "recipe",
+        )
 
         validators = [
             UniqueTogetherValidator(
@@ -35,7 +39,11 @@ class ShoppingListCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ShoppingList
-        fields = "__all__"
+        fields = (
+            "id",
+            "user",
+            "recipe",
+        )
 
         validators = [
             UniqueTogetherValidator(

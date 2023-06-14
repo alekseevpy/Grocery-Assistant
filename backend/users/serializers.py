@@ -1,4 +1,5 @@
 from core.serializers import FavoriteShoppingListSerializer
+from django.conf import settings
 from django.contrib.auth.password_validation import validate_password
 from django.core import exceptions as django_exceptions
 from djoser.serializers import UserCreateSerializer, UserSerializer
@@ -47,14 +48,13 @@ class UsersListSerializer(UserSerializer):
         )
 
     def get_is_subscribed(self, obj):
-        if (
-            self.context.get("request")
-            and not self.context["request"].user.is_anonymous
-        ):
-            return Follow.objects.filter(
+        user = self.context.get("request").user
+        return (
+            user.is_authenticated
+            and Follow.objects.filter(
                 user=self.context["request"].user, author=obj
             ).exists()
-        return False
+        )
 
 
 class SetPasswordSerializer(serializers.Serializer):
@@ -114,7 +114,9 @@ class FollowSerializer(serializers.ModelSerializer):
         return bool(obj.subscriber.filter(user=user))
 
     def get_recipes(self, obj):
-        limit = self.context["request"].query_params.get("recipes_limit", 3)
+        limit = self.context["request"].query_params.get(
+            "recipes_limit", settings.RECIPES_DEFAULT
+        )
         recipes = obj.recipes.all()[: int(limit)]
         return FavoriteShoppingListSerializer(recipes, many=True).data
 
@@ -127,7 +129,11 @@ class FollowCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Follow
-        fields = "__all__"
+        fields = (
+            "id",
+            "user",
+            "author",
+        )
 
         validators = [
             UniqueTogetherValidator(
