@@ -13,7 +13,7 @@ class IngredientSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Ingredient
-        fields = "__all__"
+        fields = ("id", "name", "measurement_unit")
 
 
 class IngredientRecipeSerializer(serializers.ModelSerializer):
@@ -27,7 +27,7 @@ class IngredientRecipeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = IngredientRecipe
-        fields = ("id", "name", "measurement_unit", "number")
+        fields = ("id", "name", "measurement_unit", "amount")
 
 
 class IngredientRecipeSaveSerializer(serializers.ModelSerializer):
@@ -38,7 +38,7 @@ class IngredientRecipeSaveSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = IngredientRecipe
-        ields = ("id", "number")
+        fields = ("id", "amount")
 
 
 class TagSerializer(serializers.ModelSerializer):
@@ -75,9 +75,7 @@ class RecipeSerializer(serializers.ModelSerializer):
 
     tags = TagSerializer(many=True)
     author = UserSerializer(read_only=True)
-    ingredients = IngredientRecipeSerializer(
-        many=True, source="ingredientrecipe_set"
-    )
+    ingredients = IngredientRecipeSerializer(many=True, source="recipe")
     image = Base64ImageField()
     is_favorited = serializers.SerializerMethodField()
     is_in_shopping_cart = serializers.SerializerMethodField()
@@ -99,11 +97,13 @@ class RecipeSerializer(serializers.ModelSerializer):
 
     def get_is_favorited(self, obj):
         user = self.context["request"].user
-        return user.is_authenticated and bool(obj.lover.filter(user=user))
+        return user.is_authenticated and bool(obj.favorite.filter(user=user))
 
     def get_is_in_shopping_cart(self, obj):
         user = self.context["request"].user
-        return user.is_authenticated and bool(obj.buyer.filter(user=user))
+        return user.is_authenticated and bool(
+            obj.shopping_list.filter(user=user)
+        )
 
 
 class RecipeCreateSerializer(serializers.ModelSerializer):
@@ -129,10 +129,6 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
             "name",
             "text",
             "cooking_time",
-        )
-        read_only_fields = (
-            "author",
-            "ingredients",
         )
         read_only_fields = (
             "author",

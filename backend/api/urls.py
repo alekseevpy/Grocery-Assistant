@@ -19,18 +19,13 @@ router.register(r"recipes", RecipeViewSet, basename="recipes")
 urlpatterns = [
     path(
         "recipes/<int:recipe_id>/favorite/",
-        FavoriteViewSet.as_view(),
+        FavoriteViewSet.as_view({"post": "create", "delete": "destroy"}),
         name="favorite_recipe",
     ),
     path(
         "recipes/<int:recipe_id>/shopping_cart/",
-        ShoppingCartViewSet.as_view(),
+        ShoppingCartViewSet.as_view({"post": "create", "delete": "destroy"}),
         name="shopping_cart",
-    ),
-    path(
-        "recipes/<int:recipe_id>/favorite/",
-        FavoriteViewSet.as_view(),
-        name="favorite_recipe",
     ),
     path(
         "recipes/download_shopping_cart/",

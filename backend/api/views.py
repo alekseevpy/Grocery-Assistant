@@ -2,7 +2,6 @@ from django.db.models import Sum
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters, mixins, status, viewsets
-from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -36,7 +35,6 @@ class TagViewSet(
     permission_classes = (AllowAny,)
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
-    pagination_class = CustomPagination
 
 
 class IngredientViewSet(
@@ -49,7 +47,6 @@ class IngredientViewSet(
     queryset = Ingredient.objects.all()
     permission_classes = (AllowAny,)
     serializer_class = IngredientSerializer
-    pagination_class = CustomPagination
     filter_backends = (filters.SearchFilter,)
     search_fields = ("^name",)
 
@@ -57,24 +54,21 @@ class IngredientViewSet(
 class FavoriteViewSet(viewsets.ViewSet):
     permission_classes = (IsAuthenticated,)
 
-    def create(self, request, pk=None):
-        recipe = get_object_or_404(Recipe, id=pk)
-        serializer = FavoriteCreateSerializer(
-            data={"recipe": recipe.id}, context={"request": request}
-        )
-        serializer.is_valid(raise_exception=True)
+    def create(self, request, **kwargs):
+        recipe = get_object_or_404(Recipe, id=kwargs["recipe_id"])
         if not Favorite.objects.filter(
             user=request.user, recipe=recipe
         ).exists():
-            serializer.save(user=request.user)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            favorite = Favorite(user=request.user, recipe=recipe)
+            favorite.save()
+            return Response(status=status.HTTP_201_CREATED)
         return Response(
             {"errors": "Рецепт уже в избранном."},
             status=status.HTTP_400_BAD_REQUEST,
         )
 
-    def destroy(self, request, pk=None):
-        recipe = get_object_or_404(Recipe, id=pk)
+    def destroy(self, request, **kwargs):
+        recipe = get_object_or_404(Recipe, id=kwargs["recipe_id"])
         favorite = get_object_or_404(
             Favorite, user=request.user, recipe=recipe
         )
@@ -88,8 +82,8 @@ class FavoriteViewSet(viewsets.ViewSet):
 class ShoppingCartViewSet(viewsets.ViewSet):
     permission_classes = (IsAuthenticated,)
 
-    def create(self, request, pk=None):
-        recipe = get_object_or_404(Recipe, id=pk)
+    def create(self, request, **kwargs):
+        recipe = get_object_or_404(Recipe, id=kwargs["recipe_id"])
         serializer = ShoppingListCreateSerializer(
             data={"recipe": recipe.id}, context={"request": request}
         )
@@ -104,8 +98,8 @@ class ShoppingCartViewSet(viewsets.ViewSet):
             status=status.HTTP_400_BAD_REQUEST,
         )
 
-    def destroy(self, request, pk=None):
-        recipe = get_object_or_404(Recipe, id=pk)
+    def destroy(self, request, **kwargs):
+        recipe = get_object_or_404(Recipe, id=kwargs["recipe_id"])
         shopping_list = get_object_or_404(
             ShoppingList, user=request.user, recipe=recipe
         )

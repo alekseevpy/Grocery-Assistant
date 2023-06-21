@@ -8,13 +8,11 @@ from .models import Favorite, ShoppingList
 class FavoriteCreateSerializer(serializers.ModelSerializer):
     """Сериализатор для добавления рецепта в избранное."""
 
+    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+
     class Meta:
         model = Favorite
-        fields = (
-            "id",
-            "user",
-            "recipe",
-        )
+        fields = ("id", "user", "recipe")
 
         validators = [
             UniqueTogetherValidator(
@@ -36,6 +34,8 @@ class FavoriteShoppingListSerializer(serializers.ModelSerializer):
 
 class ShoppingListCreateSerializer(serializers.ModelSerializer):
     """Сериализатор для добавления рецепта в список покупок."""
+
+    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
 
     class Meta:
         model = ShoppingList

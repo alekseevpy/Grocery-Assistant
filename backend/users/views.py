@@ -6,9 +6,13 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 
 from .models import Follow, User
-from .serializers import (FollowCreateSerializer, FollowSerializer,
-                          SetPasswordSerializer, UserRegistrationSerializer,
-                          UsersListSerializer)
+from .serializers import (
+    SubscriptionCreateSerializer,
+    SubscriptionSerializer,
+    SetPasswordSerializer,
+    UserRegistrationSerializer,
+    UsersListSerializer,
+)
 
 
 class UserViewSet(
@@ -43,7 +47,9 @@ class UserViewSet(
         permission_classes=(IsAuthenticated,),
     )
     def me(self, request):
-        serializer = UsersListSerializer(request.user)
+        serializer = UsersListSerializer(
+            request.user, context={"request": request}
+        )
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     @action(
@@ -67,7 +73,7 @@ class UserViewSet(
     def subscriptions(self, request):
         queryset = User.objects.filter(following__user=request.user)
         page = self.paginate_queryset(queryset)
-        serializer = FollowSerializer(
+        serializer = SubscriptionSerializer(
             page, many=True, context={"request": request}
         )
         return self.get_paginated_response(serializer.data)
@@ -81,7 +87,7 @@ class UserViewSet(
         author = get_object_or_404(User, id=kwargs["pk"])
 
         if request.method == "POST":
-            serializer = FollowCreateSerializer(
+            serializer = SubscriptionCreateSerializer(
                 author, data=request.data, context={"request": request}
             )
             serializer.is_valid(raise_exception=True)

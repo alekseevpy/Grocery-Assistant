@@ -17,7 +17,7 @@ SECRET_KEY = (
 )
 
 
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ["localhost", "127.0.0.1", "backend", "51.250.25.224", "db"]
 
@@ -114,10 +114,6 @@ REST_FRAMEWORK = {
     "DEFAULT_FILTER_BACKENDS": [
         "django_filters.rest_framework.DjangoFilterBackend",
     ],
-    "DEFAULT_PAGINATION_CLASS": [
-        "core.paginators.CustomPagination",
-    ],
-    "PAGE_SIZE": 6,
     "SEARCH_PARAM": "name",
 }
 

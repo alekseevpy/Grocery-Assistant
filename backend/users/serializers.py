@@ -89,7 +89,7 @@ class SetPasswordSerializer(serializers.Serializer):
         return validated_data
 
 
-class FollowSerializer(serializers.ModelSerializer):
+class SubscriptionSerializer(serializers.ModelSerializer):
     """Сериализатор для подписок."""
 
     is_subscribed = serializers.SerializerMethodField()
@@ -124,7 +124,7 @@ class FollowSerializer(serializers.ModelSerializer):
         return obj.recipes.count()
 
 
-class FollowCreateSerializer(serializers.ModelSerializer):
+class SubscriptionCreateSerializer(serializers.ModelSerializer):
     """Сериализатор для подписки на автора."""
 
     class Meta:
