@@ -19,7 +19,7 @@
       }
       @font-face { 
         font-family: OpenSans-Medium;
-        src: url("/static/fonts/OpenSans-Medium.ttf")
+        src: url("/static/OpenSans-Medium.ttf")
       }
       body { 
         font-family: OpenSans-Medium;
@@ -66,8 +66,8 @@
               </tr>
               {% for obj in context %}
                 <tr>
-                  <td>{{ obj.recipe__ingredients__name }}</td>
-                  <td>{{ obj.recipe__ingredients__measurement_unit }}</td>
+                  <td>{{ obj.ingredient__name }}</td>
+                  <td>{{ obj.ingredient__measurement_unit }}</td>
                   <td>{{ obj.total|floatformat:"0" }}</td>
                 </tr>
               {% endfor %}

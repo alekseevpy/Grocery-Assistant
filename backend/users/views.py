@@ -87,11 +87,16 @@ class UserViewSet(
         author = get_object_or_404(User, id=kwargs["pk"])
 
         if request.method == "POST":
-            serializer = SubscriptionCreateSerializer(
-                author, data=request.data, context={"request": request}
+            data = {"user": request.user.id, "author": author.id}
+            sub_serializer = SubscriptionCreateSerializer(
+                data=data,
+                context={"request": request},
             )
-            serializer.is_valid(raise_exception=True)
-            Follow.objects.create(user=request.user, author=author)
+            sub_serializer.is_valid(raise_exception=True)
+            follow = sub_serializer.save()
+            serializer = SubscriptionSerializer(
+                follow.author, context={"request": request}
+            )
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
         if request.method == "DELETE":

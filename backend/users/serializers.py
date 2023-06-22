@@ -111,17 +111,17 @@ class SubscriptionSerializer(serializers.ModelSerializer):
 
     def get_is_subscribed(self, obj):
         user = self.context["request"].user
-        return bool(obj.subscriber.filter(user=user))
+        return bool(obj.following.filter(user=user))
 
     def get_recipes(self, obj):
         limit = self.context["request"].query_params.get(
             "recipes_limit", settings.RECIPES_DEFAULT
         )
-        recipes = obj.recipes.all()[: int(limit)]
+        recipes = obj.recipe.all()[: int(limit)]
         return FavoriteShoppingListSerializer(recipes, many=True).data
 
     def get_recipes_count(self, obj):
-        return obj.recipes.count()
+        return obj.recipe.count()
 
 
 class SubscriptionCreateSerializer(serializers.ModelSerializer):

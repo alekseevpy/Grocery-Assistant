@@ -15,11 +15,11 @@ def link_callback(uri, rel):
     """
     if uri.find(settings.MEDIA_URL) != settings.NEGATIVE_RESULT:
         path = os.path.join(
-            settings.MEDIA_ROOT, uri.replace(settings.MEDIA_URL, '')
+            settings.MEDIA_ROOT, uri.replace(settings.MEDIA_URL, "")
         )
     elif uri.find(settings.STATIC_URL) != settings.NEGATIVE_RESULT:
         path = os.path.join(
-            settings.STATIC_ROOT, uri.replace(settings.STATIC_URL, '')
+            settings.STATIC_ROOT, uri.replace(settings.STATIC_URL, "")
         )
     return path or None
 
@@ -30,15 +30,13 @@ def html_to_pdf(template, context):
     response["Content-Disposition"] = 'filename="shopping_cart.pdf"'
     template = get_template(template)
     html = template.render(context)
-    if sys.platform == 'win32':
+    if sys.platform == "win32":
         pisaFileObject.getNamedFile = (
             lambda self: settings.STATIC_ROOT
-            + self.uri.replace(settings.STATIC_URL, '\\')
+            + self.uri.replace(settings.STATIC_URL, "\\")
         )
     pdf = pisa.CreatePDF(
-        html, dest=response,
-        encoding="utf-8",
-        link_callback=link_callback
+        html, dest=response, encoding="utf-8", link_callback=link_callback
     )
     if not pdf.err:
         return response
