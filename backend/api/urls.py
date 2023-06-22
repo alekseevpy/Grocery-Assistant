@@ -5,7 +5,6 @@ from .views import (
     IngredientViewSet,
     RecipeViewSet,
     TagViewSet,
-    FavoriteViewSet,
     ShoppingCartViewSet,
     DownloadShoppingCartView,
 )
@@ -17,11 +16,6 @@ router.register(r"ingredients", IngredientViewSet, basename="ingredients")
 router.register(r"recipes", RecipeViewSet, basename="recipes")
 
 urlpatterns = [
-    path(
-        "recipes/<int:recipe_id>/favorite/",
-        FavoriteViewSet.as_view({"post": "create", "delete": "destroy"}),
-        name="favorite_recipe",
-    ),
     path(
         "recipes/<int:recipe_id>/shopping_cart/",
         ShoppingCartViewSet.as_view({"post": "create", "delete": "destroy"}),
