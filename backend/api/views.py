@@ -1,11 +1,11 @@
 from django.db.models import Sum
 from django.shortcuts import get_object_or_404
-from rest_framework.decorators import action
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import serializers, filters, mixins, status, viewsets
+from rest_framework import filters, mixins, status, viewsets
+from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny, IsAuthenticated
-from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from core.html_to_pdf import html_to_pdf
 from core.models import Favorite, ShoppingList
@@ -13,10 +13,9 @@ from core.paginators import CustomPagination
 from core.permissions import IsAuthorOrReadOnly
 from core.serializers import (
     FavoriteShoppingListSerializer,
-    FavoriteCreateSerializer,
     ShoppingListCreateSerializer,
 )
-from recipes.models import Ingredient, Recipe, Tag, IngredientRecipe
+from recipes.models import Ingredient, IngredientRecipe, Recipe, Tag
 from recipes.serializers import (
     IngredientSerializer,
     RecipeCreateSerializer,

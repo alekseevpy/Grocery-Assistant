@@ -1,10 +1,11 @@
-from core.serializers import FavoriteShoppingListSerializer
 from django.conf import settings
 from django.contrib.auth.password_validation import validate_password
 from django.core import exceptions as django_exceptions
 from djoser.serializers import UserCreateSerializer, UserSerializer
 from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
+
+from core.serializers import FavoriteShoppingListSerializer
 
 from .models import Follow, User
 
