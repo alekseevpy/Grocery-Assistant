@@ -154,3 +154,4 @@ NEGATIVE_RESULT = -1
 RECIPES_DEFAULT = 3
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
