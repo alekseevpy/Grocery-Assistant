@@ -1,11 +1,10 @@
 import base64
 
+from core.models import Favorite, ShoppingList
 from django.core.files.base import ContentFile
 from django.shortcuts import get_object_or_404
 from djoser.serializers import UserSerializer
 from rest_framework import serializers
-
-from core.models import Favorite, ShoppingList
 from users.serializers import UsersListSerializer
 
 from .models import Ingredient, IngredientRecipe, Recipe, Tag, TagRecipe
