@@ -1,27 +1,20 @@
+from core.html_to_pdf import html_to_pdf
+from core.models import Favorite, ShoppingList
+from core.paginators import CustomPagination
+from core.permissions import IsAuthorOrReadOnly
+from core.serializers import (FavoriteShoppingListSerializer,
+                              ShoppingListCreateSerializer)
 from django.db.models import Sum
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
+from recipes.models import Ingredient, IngredientRecipe, Recipe, Tag
+from recipes.serializers import (IngredientSerializer, RecipeCreateSerializer,
+                                 RecipeSerializer, TagSerializer)
 from rest_framework import filters, mixins, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
-from core.html_to_pdf import html_to_pdf
-from core.models import Favorite, ShoppingList
-from core.paginators import CustomPagination
-from core.permissions import IsAuthorOrReadOnly
-from core.serializers import (
-    FavoriteShoppingListSerializer,
-    ShoppingListCreateSerializer,
-)
-from recipes.models import Ingredient, IngredientRecipe, Recipe, Tag
-from recipes.serializers import (
-    IngredientSerializer,
-    RecipeCreateSerializer,
-    RecipeSerializer,
-    TagSerializer,
-)
 
 from .filters import RecipeFilter
 
