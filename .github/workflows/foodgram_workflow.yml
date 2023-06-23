@@ -1,4 +1,4 @@
-name: Foodgram workflow
+name: Foodgram workflow #F
 
 on: [push]
 
@@ -44,7 +44,7 @@ jobs:
           with:
             context: backend/
             push: true
-            tags: ${{ secrets.DOCKER_USERNAME }}/foodgram-backend:latest
+            tags: alekseevpy/foodgram-backend:latest
   
   deploy:
     runs-on: ubuntu-latest
@@ -58,25 +58,15 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           passphrase: ${{ secrets.PASSPHRASE }}
           script: | 
-            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/foodgram-backend:latest
-            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/foodgram-frontend:latest
-            cd infra/
+            sudo docker pull alekseevpy/foodgram-backend:latest
             sudo docker-compose stop
             sudo docker-compose rm backend
-              - name: docker-compose up
-      - uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USER }}
-          key: ${{ secrets.SSH_KEY }}
-          passphrase: ${{ secrets.PASSPHRASE }}
-          script: |
-            cd infra/
-            sudo touch .env
+            rm .env
+            touch .env
             echo DB_ENGINE=${{ secrets.DB_ENGINE }} >> .env
-            echo POSTGRES_DB=${{ secrets.DB_NAME }} >> .env
+            echo DB_NAME=${{ secrets.DB_NAME }} >> .env
             echo POSTGRES_USER=${{ secrets.POSTGRES_USER }} >> .env
             echo POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} >> .env
             echo DB_HOST=${{ secrets.DB_HOST }} >> .env
             echo DB_PORT=${{ secrets.DB_PORT }} >> .env
-            sudo docker-compose up -d
+            sudo docker-compose up -d --build
