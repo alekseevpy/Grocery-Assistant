@@ -1,9 +1,13 @@
 ![foodgram-project-react Workflow Status](https://github.com/alekseevpy/foodgram-project-react/actions/workflows/foodgram_workflow.yml/badge.svg?branch=master&event=push)
-# Продуктовый помощник Foodgram - дипломный проект студента 51 когорты Яндекс.Практикум.
+# Продуктовый помощник Foodgram
 
 ## Описание проекта Foodgram
 «Продуктовый помощник»: сервис, на котором пользователи публикуют рецепты кулинарных изделий, подписываются на публикации других авторов и добавляют рецепты в своё избранное.
 Сервис «Список покупок» позволит пользователю создать список продуктов, которые нужно купить для приготовления выбранных блюд согласно рецептам.
+
+## Технологии:
+
+Python, Django, Django Rest Framework, Docker, Gunicorn, NGINX, PostgreSQL, Yandex Cloud, Continuous Integration, Continuous Deployment
 
 ## Установка
 
@@ -27,20 +31,11 @@
    git clone https://github.com/alekseevpy/foodgram-project-react.git
    ```
 
-3. В корневой директории создать файл `.env`, согласно примеру:
-
-   ```bash
-   DB_ENGINE=django.db.backends.postgresql
-   DB_NAME=postgres
-   POSTGRES_USER=postgres
-   POSTGRES_PASSWORD=postgres
-   DB_HOST=db
-   DB_PORT=5432
-   ```
+3. В директории infra/ создать файл `.env`, согласно примеру в файле `.env.example`
 
 4. Запустить `docker-compose`
 
-   Выполнить из корневой директории команду:
+   Из директории infra/ выполнить команду команду:
 
    ```bash
    docker-compose up -d
@@ -51,14 +46,14 @@
    Создать и выполнить миграции:
 
    ```bash
-   docker-compose exec web python manage.py makemigrations --noinput
-   docker-compose exec web python manage.py migrate --noinput
+   docker-compose exec backend python manage.py makemigrations --noinput
+   docker-compose exec backend python manage.py migrate --noinput
    ```
 
 6. Подгрузить статику
 
    ```bash
-   docker-compose exec web python manage.py collectstatic --no-input
+   docker-compose exec backend python manage.py collectstatic --no-input
    ```
 
 7. Заполнить БД тестовыми данными
@@ -69,7 +64,7 @@
     docker-compose exec backend bash
     ```
 
-    2. Внутри контейнера backend выполните команду:
+    2. Выполните команду:
 
     ```bash
     python manage.py fill_my_bd_ingridients
@@ -78,7 +73,7 @@
 8. Создать суперпользователя
 
    ```bash
-   docker-compose exec web python manage.py createsuperuser
+   docker-compose exec backend python manage.py createsuperuser
    ```
 
 9. Остановить работу всех контейнеров
@@ -107,6 +102,6 @@
 
 ## Ссылки
 
-Проект будет доступен по следующей ссылке <http://158.160.10.25/recipes/>  
+Проект будет доступен по следующей ссылке <http://localhost/signin>  
 
-Подробная документация будет доступна по следующей ссылке: <http://158.160.10.25/api/docs/>
+Подробная документация будет доступна по следующей ссылке: <http://localhost/api/docs/>
