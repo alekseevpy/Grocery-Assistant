@@ -1,4 +1,4 @@
-![foodgram-project-react Workflow Status](https://github.com/alekseevpy/foodgram-project-react/actions/workflows/foodgram_workflow.yml/badge.svg?branch=master&event=push)
+![Grocery-Assistant Workflow Status](https://github.com/alekseevpy/foodgram-project-react/actions/workflows/foodgram_workflow.yml/badge.svg?branch=master&event=push)
 # Продуктовый помощник
 
 ## Описание проекта
@@ -28,7 +28,7 @@ Python, Django, Django Rest Framework, Docker, Gunicorn, NGINX, PostgreSQL, Yand
 2. Клонировать репозиторий на локальный компьютер
 
    ```bash
-   git clone https://github.com/alekseevpy/foodgram-project-react.git
+   git clone https://github.com/alekseevpy/Grocery-Assistant.git
    ```
 
 3. В директории infra/ создать файл `.env`, согласно примеру в файле `.env.example`
